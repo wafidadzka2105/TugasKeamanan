@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Authentication System</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            background-color: #ff5722;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #e64a19;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Secure Authentication System</h1>
+        <form id="authForm">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="otp">One-Time Password (OTP):</label>
+                <input type="text" id="otp" name="otp" placeholder="Enter your OTP" required>
+            </div>
+
+            <button type="submit">Authenticate</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('authForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const otp = document.getElementById('otp').value;
+            const resultDiv = document.getElementById('result');
+
+            // Simulated database (would be replaced with secure server calls)
+            const bcrypt = {
+                compareSync: (plain, hashed) => {
+                    // Simulated bcrypt check (replace with actual bcrypt in backend)
+                    return plain === 'password123' && hashed === '$2b$10$V1eFvKbGnvZWbdWD3WyVeOD5C7MYYEaO1jb6Hn/YF9Xde/nQdT8H2';
+                }
+            };
+            const storedHashedPassword = "$2b$10$V1eFvKbGnvZWbdWD3WyVeOD5C7MYYEaO1jb6Hn/YF9Xde/nQdT8H2"; // bcrypt hash of 'password123'
+
+            // Generate dynamic OTP (Time-based OTP simulation)
+            const validOtp = generateDynamicOtp();
+
+            function generateDynamicOtp() {
+                const date = new Date();
+                const seconds = Math.floor(date.getTime() / 1000);
+                return (seconds % 1000000).toString().padStart(6, '0');
+            }
+
+            if (bcrypt.compareSync(password, storedHashedPassword) && otp === validOtp) {
+                resultDiv.textContent = "Authentication Successful!";
+                resultDiv.style.color = "#4caf50";
+
+                // Behavioral Analysis Simulation
+                simulateBehavioralAnalysis(username);
+            } else {
+                resultDiv.textContent = "Authentication Failed. Please try again.";
+                resultDiv.style.color = "#f44336";
+            }
+        });
+
+        function simulateBehavioralAnalysis(username) {
+            setTimeout(() => {
+                const recentActivities = [
+                    { action: "login", timestamp: Date.now() - 60000 },
+                    { action: "login", timestamp: Date.now() - 120000 },
+                ];
+
+                const suspiciousActivity = recentActivities.some(activity => {
+                    const timeDiff = Date.now() - activity.timestamp;
+                    return activity.action === "login" && timeDiff < 30000; // Detect logins within 30 seconds
+                });
+
+                if (suspiciousActivity) {
+                    alert(`Suspicious activity detected for user ${username}. Your account is temporarily locked.`);
+                } else {
+                    alert("Login successful with no suspicious activity detected.");
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
