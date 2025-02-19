@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STRIDE & DREAD Analysis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>STRIDE & DREAD Security Analysis</h1>
+    <form id="threatForm">
+      <label>
+        Asset:
+        <select id="asset" required>
+          <option value="" disabled selected>Select an asset</option>
+          <option value="Server Database">Server Database</option>
+          <option value="Web Application">Web Application</option>
+          <option value="Network Gateway">Network Gateway</option>
+          <option value="API Gateway">API Gateway</option>
+        </select>
+      </label>
+      <div id="threatDetails">
+        <p><strong>Threat Type:</strong> <span id="threatType">-</span></p>
+        <p><strong>Description:</strong> <span id="description">-</span></p>
+        <p><strong>DREAD Scores:</strong></p>
+        <ul>
+          <li>Damage: <span id="damage">-</span></li>
+          <li>Reproducibility: <span id="reproducibility">-</span></li>
+          <li>Exploitability: <span id="exploitability">-</span></li>
+          <li>Affected Users: <span id="affectedUsers">-</span></li>
+          <li>Discoverability: <span id="discoverability">-</span></li>
+        </ul>
+        <p><strong>Risk Score:</strong> <span id="riskScore">-</span></p>
+      </div>
+      <button type="submit">Add Threat</button>
+    </form>
+
+    <h2>Threat Dashboard</h2>
+    <div id="threatDashboard">
+      <p>No threats added yet.</p>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
